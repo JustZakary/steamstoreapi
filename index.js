@@ -11,7 +11,8 @@ const HTML = require('node-html-parser');
 
 
 function search(options, callback) {
-    axios.get(`https://store.steampowered.com/search/suggest?term=${options.search}&f=${options.type || 'games'}&cc=${options.country || 'CA'}&l=${options.language || 'english'}`).then(resp => {
+    var url = `https://store.steampowered.com/search/suggest?term=${options.search}&f=${options.type || 'games'}&cc=${options.country || 'US'}&l=${options.language || 'english'}`;
+    axios.get(url).then(resp => {
         const root = HTML.parse(resp.data);
         var games = [];
         root.getElementsByTagName('a').forEach(element => {
@@ -19,26 +20,31 @@ function search(options, callback) {
                 name: element.childNodes[0].rawText,
                 link: element.getAttribute('href'),
                 appid: element.getAttribute('data-ds-appid'),
-                image: `https://cdn.akamai.steamstatic.com/steam/apps/${element.getAttribute('data-ds-appid')}/header.jpg`,
-                price: {
-                    currentPrice: "",
-                    originalPrice: "",
-                    discount: "",
-                    onsale: false,
-                    currency: "",
-                }
+                image: getImages(element.getAttribute('data-ds-appid')),
             });
         });
         if (games.length > 0) {
             callback({ games: games, success: true });
         } else {
-            callback({ games: games, success: false });
-            throw new Error("No games found with that search.");
+            callback({ message: "No games found with that search.", success: false });
         }
     });
 }
 
+function getImages(appid) {
+    return ({
+        header: `https://cdn.akamai.steamstatic.com/steam/apps/${appid}/header.jpg`,
+        img184x69: `https://cdn.akamai.steamstatic.com/steam/apps/${appid}/capsule_184x69.jpg`,
+        img120x45: `https://cdn.akamai.steamstatic.com/steam/apps/${appid}/capsule_sm_120.jpg`,
+    })
+}
+
 function getGameInfo(options, callback) {
+    var url = `https://store.steampowered.com/api/appdetails?appids=${options.appid}&cc=${options.country || 'US'}&l=${options.language || 'english'}`;
+    console.log(url);
+    axios.get(url).then(resp => {
+        callback(resp.data);
+    });
 
 }
 
@@ -46,10 +52,21 @@ search({
     search: "csgo",
     type: "games",
     country: "CA",
-}, function (err, data) {
-    if (err) {
-        console.log(err);
-    } else {
+}, function (data) {
+    if (!data.success) {
         console.log(data);
+    } else {
+        getGameInfo({
+            appid: data.games[0].appid,
+            country: "CA",
+        }, function (data) {
+            console.log(data);
+        });
     }
 });
+
+module.exports = {
+    search: search,
+    getGameInfo: getGameInfo,
+    getImages: getImages,
+}
