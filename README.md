@@ -96,7 +96,7 @@ console.log(steamstoreapi.getImages(730));
 Get game details by search:
 
 ```javascript
-const steamstoreapi = steamstoreapi("steamstoreapi");
+const steamstoreapi = require("steamstoreapi");
 
 steamstoreapi.search(
   {
