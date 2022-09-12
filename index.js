@@ -1,63 +1,55 @@
-const fs = require('fs');
-const path = require('path');
-const json = require('big-json');
-var XMLHttpRequest = require('xhr2');
-Array.prototype.myFind = function(obj) {
-    return this.filter(function(item) {
-        for (var prop in obj)
-            if (!(prop in item) || obj[prop] !== item[prop].toLowerCase())
-                return false;
-        return true;
-    });
-};
-//Save Steam Apps
-function updateSteamApps() {
-    console.log("Updating Steam Database...")
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api.steampowered.com/ISteamApps/GetAppList/v0002/?format=json');
-    xhr.send();
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            fs.writeFile("steam.json", xhr.response, function writeJSON(err) {
-                if (err) return console.log(err);
-                console.log("Steam Updated...")
+//https://store.steampowered.com/search/suggest?term=csgo&f=games&cc=CA&l=english
+//https://store.steampowered.com/search/suggest?
+//term=csgo
+//&f=games
+//&cc=CA
+//&l=english
+//Outputs HTML, must be parsed
+
+const axios = require('axios');
+const HTML = require('node-html-parser');
+
+
+function search(options, callback) {
+    axios.get(`https://store.steampowered.com/search/suggest?term=${options.search}&f=${options.type || 'games'}&cc=${options.country || 'CA'}&l=${options.language || 'english'}`).then(resp => {
+        const root = HTML.parse(resp.data);
+        var games = [];
+        root.getElementsByTagName('a').forEach(element => {
+            games.push({
+                name: element.childNodes[0].rawText,
+                link: element.getAttribute('href'),
+                appid: element.getAttribute('data-ds-appid'),
+                image: `https://cdn.akamai.steamstatic.com/steam/apps/${element.getAttribute('data-ds-appid')}/header.jpg`,
+                price: {
+                    currentPrice: "",
+                    originalPrice: "",
+                    discount: "",
+                    onsale: false,
+                    currency: "",
+                }
             });
-        }
-    };
-}
-//Search By Name
-function searchItem(search, callback) {
-    const readStream = fs.createReadStream('steam.json');
-    const parseStream = json.createParseStream();
-    var title = search
-    parseStream.on('data', function(pojo) {
-        var curSearch = "";
-        var allTitles = [];
-        for (var i = 0; i < title.length; i++) {
-            curSearch += title.charAt(i)
-            var found = pojo.applist.apps.myFind({ name: curSearch.toLowerCase() })
-            if (found.length == 1) {
-                allTitles.push(found)
-            }
-        }
-        var final = allTitles[allTitles.length - 1]
-        callback(final)
-    });
-    readStream.pipe(parseStream);
-}
-//Get Data by ID
-function getByID(id, callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://store.steampowered.com/api/appdetails?appids=' + id);
-    xhr.send();
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            if (JSON.parse(xhr.response)[id + ""].success) {
-                callback(JSON.parse(xhr.response)[id + ""].data)
-            }
+        });
+        if (games.length > 0) {
+            callback({ games: games, success: true });
         } else {
-            callback(JSON.parse('{"' + id + '":{"success":false}}'))
+            callback({ games: games, success: false });
+            throw new Error("No games found with that search.");
         }
-    };
+    });
 }
-module.exports = { getByID, searchItem, updateSteamApps }
+
+function getGameInfo(options, callback) {
+
+}
+
+search({
+    search: "csgo",
+    type: "games",
+    country: "CA",
+}, function (err, data) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(data);
+    }
+});
