@@ -1,6 +1,9 @@
 # Steam Store API
 
-This NPM module is a API wrapper that makes the steam unoffical API easier to use.
+This NPM module is a API wrapper that makes the steam unofficial API easier to use.
+
+[GitHub](https://github.com/JustZakary/steamstoreapi)
+[NPM](https://www.npmjs.com/package/steamstoreapi)
 
 ## Installation
 
