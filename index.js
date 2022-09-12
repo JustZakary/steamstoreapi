@@ -1,11 +1,4 @@
-//https://store.steampowered.com/search/suggest?term=csgo&f=games&cc=CA&l=english
-//https://store.steampowered.com/search/suggest?
-//term=csgo
-//&f=games
-//&cc=CA
-//&l=english
-//Outputs HTML, must be parsed
-
+//Created by Zakary Loney (September 2022)
 const axios = require('axios');
 const HTML = require('node-html-parser');
 
@@ -19,7 +12,7 @@ function search(options, callback) {
             games.push({
                 name: element.childNodes[0].rawText,
                 link: element.getAttribute('href'),
-                appid: element.getAttribute('data-ds-appid'),
+                appid: parseFloat(element.getAttribute('data-ds-appid')),
                 image: getImages(element.getAttribute('data-ds-appid')),
             });
         });
@@ -48,17 +41,21 @@ function getGameInfo(options, callback) {
 
 }
 
+
 search({
     search: "csgo",
     type: "games",
     country: "CA",
+    language: "spanish",
 }, function (data) {
     if (!data.success) {
-        console.log(data);
+        //console.log(data);
     } else {
+        console.log(data.games[0]);
         getGameInfo({
             appid: data.games[0].appid,
             country: "CA",
+            language: "spanish",
         }, function (data) {
             console.log(data);
         });

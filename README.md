@@ -1,90 +1,174 @@
-# Steam Store API Wrapper
+# Steam Store API
 
-NodeJS module for searching and getting Steam store listings.
+This NPM module is a API wrapper that makes the steam unoffical API easier to use.
 
 ## Installation
 
+Install steamstoreapi with npm
 
 ```bash
-npm i steamstoreapi
+  npm install steamstoreapi
 ```
 
-## Usage
+## API Reference
 
-### Get app ID by title
-Scans the ``steam.json`` file for the title
+#### Search Steam
+
 ```javascript
-var SteamStoreAPI = require("steamstoreapi")
-
-var title = "Golf With Your Friends" //case insensitive
-SteamStoreAPI.searchItem(title, function(data) {
-    console.log(data);
-    // Outputs => [ { appid: 431240, name: 'Golf With Your Friends' } ]
-})
+steamstoreapi.search(options, callback);
 ```
 
-### Get data by ID
-Get app data by ID. [Example](https://store.steampowered.com/api/appdetails?appids=431240)
+options Parameters:
+| Parameter | Type | Description |
+| :-------- | :------- | :------------------------- |
+| `search` | `string` | **Required**. Search Query |
+| `language` | `string` | Language you want the results in: `english`, `french`, `spanish`, etc (Default `english`) |
+| `country` | `string` | Country you want to search from. Example: `US`, `CA`, `CH`, etc. (Default `US`) |
 
-Get Data Like:
-- Type (Game, Music, DLC, etc)
-- Game title
-- Game price
-- DLC IDs
-- Description
-- System requirements
-- Promo images
-- Screenshots
-- Platforms
-- Genres
-- Achievements
-- Recommendations
-- Categories
-- etc
+Example:
 
 ```javascript
-var SteamStoreAPI = require("steamstoreapi")
+var options = {
+  search: "csgo",
+  country: "FR", //optional  (Default 'US')
+  language: "french", //optional (Default 'english')
+};
 
-var id = "431240"
-SteamStoreAPI.getByID(id, function(data) {
+steamstoreapi.search(options, function (data) {
+  if (!data.success) {
     console.log(data);
-    /*
+  } else {
+    console.log(data);
+  }
+});
+```
 
-    Output:
+##
 
-    {
-        "type":"game",
-        "name":"Golf With Your Friends",
-        "steam_appid":431240,
-        "required_age":0,
-        "is_free":false,
-        "dlc":[
-           564170,
-           1277570
-        ],
-        "detailed_description":"...",
-        "about_the_game":"...",
-        "short_description":"...",
-        "supported_languages":"...",
-        "header_image":"...",
-        "website":"https://www.team17.com/",
-        "price_overview":{
-           "currency":"CAD",
-           "initial":1749,
-           "final":577,
-           "discount_percent":67,
-           "initial_formatted":"CDN$ 17.49",
-           "final_formatted":"CDN$ 5.77"
+#### Get game details by App ID
+
+```javascript
+steamstoreapi.getGameInfo(options, callback);
+```
+
+options Parameters:
+| Parameter | Type | Description |
+| :-------- | :------- | :------------------------- |
+| `appid` | `number` | **Required**. Game App ID |
+| `language` | `string` | Language you want the results in: `english`, `french`, `spanish`, etc (Default `english`) |
+| `country` | `string` | Country you want to search from. Example: `US`, `CA`, `CH`, etc. (Default `US`) |
+
+Example:
+
+```javascript
+var options = {
+  appid: 730,
+  country: "FR", //optional  (Default 'US')
+  language: "french", //optional (Default 'english')
+};
+
+steamstoreapi.getGameInfo(options, function (data) {
+  console.log(data);
+});
+```
+
+##
+
+#### Get game images
+
+```javascript
+steamstoreapi.getImages(appid);
+```
+
+options Parameters:
+| Parameter | Type | Description |
+| :-------- | :------- | :------------------------- |
+| `appid` | `number` | **Required**. Game App ID |
+
+Example:
+
+```javascript
+console.log(steamstoreapi.getImages(730));
+```
+
+## Usage/Examples
+
+Get game details by search:
+
+```javascript
+const steamstoreapi = steamstoreapi("steamstoreapi");
+
+steamstoreapi.search(
+  {
+    search: "csgo",
+    type: "games",
+  },
+  function (data) {
+    if (!data.success) {
+      console.log(data);
+    } else {
+      steamstoreapi.getGameInfo(
+        {
+          appid: data.games[0].appid,
         },
+        function (data) {
+          console.log(data);
+        }
+      );
     }
-    */
-})
+  }
+);
 ```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Get games by search:
 
-Please make sure to update tests as appropriate.
+```javascript
+const steamstoreapi = require("steamstoreapi");
+
+steamstoreapi.search(
+  {
+    search: "csgo",
+    type: "games",
+  },
+  function (data) {
+    if (!data.success) {
+      console.log(data);
+    } else {
+      console.log(data);
+    }
+  }
+);
+```
+
+Get games by App ID:
+
+```javascript
+const steamstoreapi = require("steamstoreapi");
+
+steamstoreapi.getGameInfo(
+  {
+    appid: `730`,
+  },
+  function (data) {
+    console.log(data);
+  }
+);
+```
+
+## Roadmap
+
+- Add more parameters to search (software type, price filters, category, etc)
+
+- Better error handling
+
+## Feedback
+
+If you have any feedback, please reach out to us at zakaryloney@gmail.com
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Authors
+
+- [@JustZakary](https://www.github.com/justzakary)
