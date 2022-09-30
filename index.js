@@ -42,25 +42,6 @@ function getGameInfo(options, callback) {
 }
 
 
-search({
-    search: "csgo",
-    type: "games",
-    country: "CA",
-    language: "spanish",
-}, function (data) {
-    if (!data.success) {
-        //console.log(data);
-    } else {
-        console.log(data.games[0]);
-        getGameInfo({
-            appid: data.games[0].appid,
-            country: "CA",
-            language: "spanish",
-        }, function (data) {
-            console.log(data);
-        });
-    }
-});
 
 module.exports = {
     search: search,
