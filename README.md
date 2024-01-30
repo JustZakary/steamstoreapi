@@ -2,9 +2,6 @@
 
 This NPM module is a API wrapper that makes the steam unofficial API easier to use.
 
-[GitHub](https://github.com/JustZakary/steamstoreapi)
-[NPM](https://www.npmjs.com/package/steamstoreapi)
-
 ## Installation
 
 Install steamstoreapi with npm
@@ -13,160 +10,47 @@ Install steamstoreapi with npm
   npm install steamstoreapi
 ```
 
-## API Reference
+## Function: searchSteam
 
-#### Search Steam
+This function takes an input object and returns a promise that resolves to an array of game objects. Each game object contains the following properties:
+
+- `title`: The title of the game.
+- `appid`: The application ID of the game.
+- `releaseDate`: The release date of the game.
+- `reviewSummary`: A summary of the game's reviews.
+- `price`: The price of the game.
+- `images`: An object containing URLs to various images of the game.
+
+### Usage
 
 ```javascript
-steamstoreapi.search(options, callback);
+const response = await searchSteam({term: 'gta'});
+console.log(response);
 ```
 
-options Parameters:
-| Parameter | Type | Description |
-| :-------- | :------- | :------------------------- |
-| `search` | `string` | **Required**. Search Query |
-| `language` | `string` | Language you want the results in: `english`, `french`, `spanish`, etc (Default `english`) |
-| `country` | `string` | Country you want to search from. Example: `US`, `CA`, `CH`, etc. (Default `US`) |
+Example Output
 
-Example:
-
-```javascript
-var options = {
-  search: "csgo",
-  country: "FR", //optional  (Default 'US')
-  language: "french", //optional (Default 'english')
-};
-
-steamstoreapi.search(options, function (data) {
-  if (!data.success) {
-    console.log(data);
-  } else {
-    console.log(data);
-  }
-});
-```
-
-##
-
-#### Get game details by App ID
-
-```javascript
-steamstoreapi.getGameInfo(options, callback);
-```
-
-options Parameters:
-| Parameter | Type | Description |
-| :-------- | :------- | :------------------------- |
-| `appid` | `number` | **Required**. Game App ID |
-| `language` | `string` | Language you want the results in: `english`, `french`, `spanish`, etc (Default `english`) |
-| `country` | `string` | Country you want to search from. Example: `US`, `CA`, `CH`, etc. (Default `US`) |
-
-Example:
-
-```javascript
-var options = {
-  appid: 730,
-  country: "FR", //optional  (Default 'US')
-  language: "french", //optional (Default 'english')
-};
-
-steamstoreapi.getGameInfo(options, function (data) {
-  console.log(data);
-});
-```
-
-##
-
-#### Get game images
-
-```javascript
-steamstoreapi.getImages(appid);
-```
-
-options Parameters:
-| Parameter | Type | Description |
-| :-------- | :------- | :------------------------- |
-| `appid` | `number` | **Required**. Game App ID |
-
-Example:
-
-```javascript
-console.log(steamstoreapi.getImages(730));
-```
-
-## Usage/Examples
-
-Get game details by search:
-
-```javascript
-const steamstoreapi = require("steamstoreapi");
-
-steamstoreapi.search(
+```js
+[
   {
-    search: "csgo",
-    type: "games",
+    title: 'Grand Theft Auto V',
+    appid: '271590',
+    releaseDate: '13 Apr, 2015',
+    reviewSummary: 'Very Positive<br>86% of the 1,577,439 user reviews for this game are positive.',
+    price: 'C$ 19.79',
+    images: {
+      header: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg',
+      img184x69: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_184x69.jpg',
+      img120x45: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_sm_120.jpg',
+    },
   },
-  function (data) {
-    if (!data.success) {
-      console.log(data);
-    } else {
-      steamstoreapi.getGameInfo(
-        {
-          appid: data.games[0].appid,
-        },
-        function (data) {
-          console.log(data);
-        }
-      );
-    }
-  }
-);
+  ...
+];
 ```
 
-Get games by search:
+## Options
 
-```javascript
-const steamstoreapi = require("steamstoreapi");
-
-steamstoreapi.search(
-  {
-    search: "csgo",
-    type: "games",
-  },
-  function (data) {
-    if (!data.success) {
-      console.log(data);
-    } else {
-      console.log(data);
-    }
-  }
-);
-```
-
-Get games by App ID:
-
-```javascript
-const steamstoreapi = require("steamstoreapi");
-
-steamstoreapi.getGameInfo(
-  {
-    appid: `730`,
-  },
-  function (data) {
-    console.log(data);
-  }
-);
-```
-
-## Roadmap
-
-- Add more parameters to search (software type, price filters, category, etc)
-
-- Better error handling
-
-## Feedback
-
-If you have any feedback, please reach out to us at zakaryloney@gmail.com
+You can pass an options object to the searchSteam function to customize the search results. The following options are available:
 
 ## License
 
@@ -175,3 +59,7 @@ If you have any feedback, please reach out to us at zakaryloney@gmail.com
 ## Authors
 
 - [@JustZakary](https://www.github.com/justzakary)
+
+```
+
+```
