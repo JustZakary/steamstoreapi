@@ -20,7 +20,10 @@
     "axios": "^0.27.2",
     "node-html-parser": "^6.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
   "keywords": [
     "steam",
     "api",
