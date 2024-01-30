@@ -10,7 +10,7 @@ Install steamstoreapi with npm
   npm install steamstoreapi
 ```
 
-## Function: searchSteam
+## Function: getGameData
 
 This function takes an input object and returns a promise that resolves to an array of game objects. Each game object contains the following properties:
 
