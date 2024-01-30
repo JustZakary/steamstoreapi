@@ -56,7 +56,6 @@ async function searchSteam(input, getAllData = false) {
     .join('&');
   var url = baseUrl + queryString;
 
-  console.log(url);
   const resp = await axios.get(url);
 
   var html = resp.data;
