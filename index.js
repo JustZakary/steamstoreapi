@@ -92,12 +92,27 @@ async function searchSteam(input, getAllData = false) {
 }
 
 async function getGameData(appid) {
+  //check if appid is a steam url
+  if (appid.includes('https://store.steampowered.com/app/')) {
+    const regex = /https:\/\/store\.steampowered\.com\/app\/(\d+)/;
+    const match = appid.match(regex);
+    if (match) {
+      appid = match[1];
+    }
+  }
+
   const url = `https://store.steampowered.com/api/appdetails?appids=${appid}`;
   const resp = await axios.get(url);
-  return resp.data;
+  return resp.data[appid].data;
 }
 
 module.exports = {
   searchSteam,
   getGameData,
 };
+
+async function main() {
+  const response = await searchSteam({term: 'gta'}, true);
+  console.log(response);
+}
+main();
