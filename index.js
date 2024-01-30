@@ -67,7 +67,12 @@ async function searchSteam(input, getAllData = false) {
   // Extract information for each game
   const gamesPromises = gameElements.map(async (game) => {
     if (getAllData) {
-      return await getGameData(game.getAttribute('data-ds-appid'));
+      try {
+        data = await getGameData(game.getAttribute('data-ds-appid'));
+        return data;
+      } catch (error) {
+        //ignore error
+      }
     } else {
       return {
         title: game.querySelector('.title').innerText.trim(),
@@ -80,7 +85,8 @@ async function searchSteam(input, getAllData = false) {
     }
   });
 
-  const games = await Promise.all(gamesPromises);
+  var games = await Promise.all(gamesPromises);
+  games = games.filter((game) => game !== undefined);
 
   var response = games;
   return response;
@@ -96,32 +102,3 @@ module.exports = {
   searchSteam,
   getGameData,
 };
-
-//Examples:
-
-//Search for games
-async function main() {
-  const input = {
-    term: 'gta',
-  };
-
-  const response = await searchSteam(input);
-  console.log(response);
-  // Output:
-  // [
-  //   {
-  //     title: 'Grand Theft Auto V',
-  //     appid: '271590',
-  //     releaseDate: '13 Apr, 2015',
-  //     reviewSummary: 'Very Positive<br>86% of the 1,577,439 user reviews for this game are positive.',
-  //     price: 'C$ 19.79',
-  //     images: {
-  //       header: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg',
-  //       img184x69: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_184x69.jpg',
-  //       img120x45: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_sm_120.jpg',
-  //     },
-  //   },
-  //   ...
-  // ];
-}
-main();
