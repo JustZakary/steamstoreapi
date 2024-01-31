@@ -110,9 +110,3 @@ module.exports = {
   searchSteam,
   getGameData,
 };
-
-async function main() {
-  const response = await searchSteam({term: 'gta'}, true);
-  console.log(response);
-}
-main();
