@@ -1,3 +1,6 @@
+Values can also be accessed by the FILTERS value in the class. Example: `SteamStoreAPI.FILTERS.SOFTWARE_TYPE.GAMES`
+[Full List of Values](https://github.com/JustZakary/steamstoreapi/blob/main/const.json)
+
 | Option              | Key Reference       | Value Type                    | Description                                                                 |
 | ------------------- | ------------------- | ----------------------------- | --------------------------------------------------------------------------- |
 | Term                | term                | String                        | A term or keyword to search for.                                            |
@@ -663,3 +666,7 @@
 | Hobby Sim                         | `1220528` |
 | Football (Soccer)                 | `1254546` |
 | Football (American)               | `1254552` |
+
+```
+
+```

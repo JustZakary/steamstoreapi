@@ -101,6 +101,8 @@ An object containing search parameters.
 | Tags | tags | String | Tags associated with the software. |
 | Count | count | number | Count of games to load (min 25) |
 
+[Full list of search options](https://github.com/JustZakary/steamstoreapi/blob/main/OPTIONS.MD)
+
 ## License
 
 [Mit License](https://github.com/JustZakary/steamstoreapi/tree/main?tab=MIT-1-ov-file#readme)
