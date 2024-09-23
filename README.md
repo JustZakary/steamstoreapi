@@ -1,5 +1,7 @@
 # Steam Store API
 
+[![NPM](https://nodei.co/npm/steamstoreapi.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/steamstoreapi/)
+
 This NPM module is a API wrapper that makes the steam unofficial API easier to use.
 
 ## Installation
