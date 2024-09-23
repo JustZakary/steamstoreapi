@@ -1,6 +1,8 @@
 # Steam Store API
 
-[![NPM](https://nodei.co/npm/steamstoreapi.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/steamstoreapi/)
+![Steam](https://img.shields.io/badge/Steam-000000?style=for-the-badge&logo=steam&logoColor=white)
+
+[![NPM](https://nodei.co/npm/steamstoreapi.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/steamstoreapi)
 
 This NPM module is a API wrapper that makes the steam unofficial API easier to use.
 
