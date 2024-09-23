@@ -1,196 +1,120 @@
-# Steam Store API
+# SteamStoreAPI
 
-![Steam](https://img.shields.io/badge/Steam-000000?style=for-the-badge&logo=steam&logoColor=white)
-
-[![NPM](https://nodei.co/npm/steamstoreapi.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/steamstoreapi)
-
-This NPM module is a API wrapper that makes the steam unofficial API easier to use.
+An unofficial Node.js module to interact with the Steam Store, allowing you to search for games and retrieve detailed game data programmatically.
 
 ## Installation
 
-Install steamstoreapi with npm
-
 ```bash
-  npm install steamstoreapi
+npm install steamstoreapi
 ```
 
-## Function: getGameData
+## Usage
 
-This function takes an input object and returns a promise that resolves to an array of game objects. Each game object contains the following properties:
-
-- `title`: The title of the game.
-- `appid`: The application ID of the game.
-- `releaseDate`: The release date of the game.
-- `reviewSummary`: A summary of the game's reviews.
-- `price`: The price of the game.
-- `images`: An object containing URLs to various images of the game.
-
-### Usage
+### Search for Games
 
 ```javascript
-const steamstoreapi = require('steamstoreapi');
-const response = await steamstoreapi.searchSteam({term: 'gta'});
-console.log(response);
+const SteamStoreAPI = require('steam-store-api');
+
+(async () => {
+  const searchOptions = {
+    term: 'gta',
+    max_price: 30,
+  };
+
+  const games = await SteamStoreAPI.searchSteam(searchOptions);
+  console.log(games);
+})();
 ```
 
-Example Output
-
-```js
-[
-  {
-    title: 'Grand Theft Auto V',
-    appid: '271590',
-    releaseDate: '13 Apr, 2015',
-    reviewSummary: 'Very Positive<br>86% of the 1,577,439 user reviews for this game are positive.',
-    price: 'C$ 19.79',
-    images: {
-      header: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg',
-      img184x69: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_184x69.jpg',
-      img120x45: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_sm_120.jpg',
-    },
-  },
-  ...
-];
-```
-
-Note: To get the full list of properties for each game object, you can set the second parameter of the searchSteam function to true. (This may take longer to resolve)
+### Get Game Details
 
 ```javascript
-const steamstoreapi = require('steamstoreapi');
-const response = await steamstoreapi.searchSteam({term: 'gta'}, true);
-console.log(response);
+const SteamStoreAPI = require('steam-store-api');
+
+(async () => {
+  const appid = '271590'; // GTA V AppID
+  const gameData = await SteamStoreAPI.getGameDetails(appid);
+  console.log(gameData);
+})();
 ```
 
-Example Output
+## API Reference
 
-```js
-[
-  {
-    type: 'game',
-    name: 'Grand Theft Auto V',
-    steam_appid: 271590,
-    required_age: '17',
-    is_free: false,
-    controller_support: 'full',
-    dlc: [Array],
-    detailed_description: '',
-    about_the_game: '',
-    short_description:
-      'Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond.',
-    supported_languages: 'English, French, Italian, German, Spanish, Korean, Polish, Portuguese - Brazil, Russian, Chinese, Japanese, Spanish - Latin America',
-    header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg?t=1706131787',
-    capsule_image: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_231x87.jpg?t=1706131787',
-    website: 'http://www.rockstargames.com/V/',
-    pc_requirements: [Object],
-    mac_requirements: [Object],
-    linux_requirements: [Object],
-    legal_notice: '',
-    ext_user_account_notice: 'Rockstar Games Social Club',
-    developers: [Array],
-    publishers: [Array],
-    packages: [Array],
-    package_groups: [Array],
-    platforms: [Object],
-    metacritic: [Object],
-    categories: [Array],
-    genres: [Array],
-    screenshots: [Array],
-    movies: [Array],
-    recommendations: [Object],
-    achievements: [Object],
-    release_date: [Object],
-    support_info: [Object],
-    background: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/page_bg_generated_v6b.jpg?t=1706131787',
-    background_raw: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/page_bg_generated.jpg?t=1706131787',
-    content_descriptors: [Object],
-  },
-  ...
-];
-```
+### Methods
 
-## Function: searchSteam
+`searchSteam(searchOptions, getAllData = false)`
 
-This function takes an appId and returns a promise that resolves to the game object.
+Searches the Steam store and returns an array of game objects.
 
-```js
-const steamstoreapi = require('steamstoreapi');
-const response = await steamstoreapi.getGameData('271590'); //Appid for GTA V
-console.log(response);
-```
+- Parameters:
+  - `searchOptions` (`SearchOptions`): The input object containing search parameters.
+  - `getAllData` (`boolean`, optional): If `true`, retrieves all available data for each game. Default is `false`.
+- Returns:
+  - `Promise<Array>`: A promise that resolves to an array of game objects.
+- Example:
 
-Example Output
+  ```javascript
+  const searchOptions = {
+    term: 'gta',
+    max_price: 30,
+  };
 
-```js
-{
-  type: 'game',
-  name: 'Grand Theft Auto V',
-  steam_appid: 271590,
-  required_age: '17',
-  is_free: false,
-  controller_support: 'full',
-  dlc: [Array],
-  detailed_description: '',
-  about_the_game: '',
-  short_description:
-    'Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond.',
-  supported_languages: 'English, French, Italian, German, Spanish, Korean, Polish, Portuguese - Brazil, Russian, Chinese, Japanese, Spanish - Latin America',
-  header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg?t=1706131787',
-  capsule_image: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/capsule_231x87.jpg?t=1706131787',
-  website: 'http://www.rockstargames.com/V/',
-  pc_requirements: [Object],
-  mac_requirements: [Object],
-  linux_requirements: [Object],
-  legal_notice: '',
-  ext_user_account_notice: 'Rockstar Games Social Club',
-  developers: [Array],
-  publishers: [Array],
-  packages: [Array],
-  package_groups: [Array],
-  platforms: [Object],
-  metacritic: [Object],
-  categories: [Array],
-  genres: [Array],
-  screenshots: [Array],
-  movies: [Array],
-  recommendations: [Object],
-  achievements: [Object],
-  release_date: [Object],
-  support_info: [Object],
-  background: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/page_bg_generated_v6b.jpg?t=1706131787',
-  background_raw: 'https://cdn.akamai.steamstatic.com/steam/apps/271590/page_bg_generated.jpg?t=1706131787',
-  content_descriptors: [Object],
-}
+  const games = await SteamStoreAPI.searchSteam(searchOptions);
+  console.log(games);
+  ```
 
-```
+`getGameDetails(appid)`
 
-## Options
+Retrieves detailed information about a game.
 
-You can pass an options object to the searchSteam function to customize the search results. [View the full list of options](https://github.com/JustZakary/steamstoreapi/blob/main/OPTIONS.MD)
+- Parameters:
+  - `appid` (`string`): The AppID of the game.
+- Returns:
+  - `Promise<Object>`: A promise that resolves to an object containing detailed game data.
+- Example:
 
-Eamples:
+  ```javascript
+  const appid = '271590'; // GTA V AppID
+  const gameData = await SteamStoreAPI.getGameDetails(appid);
+  console.log(gameData);
+  ```
 
-```javascript
-const steamstoreapi = require('steamstoreapi');
-//Get VR games
-steamstoreapi.searchSteam({vr_support: '402'});
+### Types
 
-//Get games on sale
-steamstoreapi.searchSteam({only_specials: true});
+`SearchOptions`
 
-// Get Games for windows and mac
-steamstoreapi.searchSteam({supported_os: 'windows,mac'});
-
-// Steam Deck Compatible Games
-steamstoreapi.searchSteam({deck_compatibility: '3,2'});
-
-// You can also combine options
-steamstoreapi.searchSteam({term: 'Gorilla Tag', only_specials: true, vr_support: '402'}); //
-```
+An object containing search parameters.
+| Option | Key Reference | Value Type | Description |
+| ------------------- | ------------------- | ----------------------------- | --------------------------------------------------------------------------- |
+| Term | term | String | A term or keyword to search for. |
+| Software Type | software_type | String | The type of software being searched.|
+| Additional Features | additional_features | String | Extra features of the software.|
+| Multiplayer | multiplayer | String | Indicates if the software supports multiplayer.|
+| Only Specials | only_specials | Boolean | Filter to show only special offers. |
+| Hide Free | hide_free | Boolean | Option to hide free-to-play software. |
+| Max Price | max_price | Number | Maximum price limit for the search. |
+| Controller Support | controller_support | String | Support for various types of controllers.|
+| VR Support | vr_support | String | Virtual Reality support availability.|
+| Supported OS | supported_os | "mac" \| "windows" \| "linux" | Operating systems that the software supports.|
+| Deck Compatibility | deck_compatibility | "3" \| "2" | Compatibility level with gaming decks. |
+| Supported Language | supported_lang | String | Languages supported by the software.|
+| Tags | tags | String | Tags associated with the software. |
+| Count | count | number | Count of games to load (min 25) |
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[Mit License](https://github.com/JustZakary/steamstoreapi/tree/main?tab=MIT-1-ov-file#readme)
 
-## Authors
+## Contributing
 
-- [@JustZakary](https://www.github.com/justzakary)
+Contributions are welcome! Please open a pull request to contribute to this project.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Create a new Pull Request.
+
+## Disclaimer
+
+This is an unofficial project and is not affiliated with or endorsed by Valve Corporation or Steam.
