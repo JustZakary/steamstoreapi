@@ -1,4 +1,5 @@
 # SteamStoreAPI
+![npm downloads](https://img.shields.io/npm/d18m/steamstoreapi.svg?label=npm%20downloads&logo=npm&style=flat-square)
 
 An unofficial Node.js module to interact with the Steam Store, allowing you to search for games and retrieve detailed game data programmatically.
 
