@@ -14,7 +14,7 @@ npm install steamstoreapi
 ### Search for Games
 
 ```javascript
-const SteamStoreAPI = require('steam-store-api');
+const SteamStoreAPI = require('steamstoreapi');
 
 (async () => {
   const searchOptions = {
@@ -30,7 +30,7 @@ const SteamStoreAPI = require('steam-store-api');
 ### Get Game Details
 
 ```javascript
-const SteamStoreAPI = require('steam-store-api');
+const SteamStoreAPI = require('steamstoreapi');
 
 (async () => {
   const appid = '271590'; // GTA V AppID
