@@ -1,4 +1,3 @@
-// __tests__/math.test.js
 const SteamStoreAPI = require('../SteamStoreAPI');
 
 test('searching for gta', () => {
